@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head"/>
+<body>
+<div th:replace="fragments/navbar"></div>
+<main class="container">
+    <hgroup>
+        <h1>Перевод сотрудника</h1>
+        <p>Переведите сотрудника в другую компанию</p>
+    </hgroup>
+
+    <!-- Current employee info card -->
+    <article class="card">
+        <h3>Информация о сотруднике</h3>
+        <div th:object="${employeeDetails}">
+            <p><strong>Имя:</strong> <span th:text="*{firstName} + ' ' + *{lastName}"></span></p>
+            <p><strong>Должность:</strong> <span th:text="*{jobTitle}"></span></p>
+            <p><strong>Текущая компания:</strong> <span th:text="*{companyName}"></span></p>
+            <p><strong>Зарплата:</strong> $<span th:text="${#numbers.formatDecimal(employeeDetails.salary, 1, 2)}"></span></p>
+        </div>
+    </article>
+
+    <!-- Transfer form -->
+    <article style="max-width: 600px; margin: 2rem auto;">
+        <h3>Выберите новую компанию</h3>
+        <form th:action="@{/employees/employee-transfer/{name}(name=${employeeFullName})}"
+              th:method="post"
+              th:object="${transferModel}">
+
+            <label for="newCompany">
+                Новая компания
+                <select id="newCompany" 
+                        th:field="*{newCompanyName}" 
+                        th:errorclass="is-invalid"
+                        required>
+                    <option value="">Выберите компанию...</option>
+                    <option th:each="c : ${availableCompanies}"
+                            th:value="${c.name}"
+                            th:text="${c.name + ' (' + c.town + ')'}"
+                            th:disabled="${c.name == employeeDetails.companyName}"></option>
+                </select>
+                <small th:if="${#fields.hasErrors('newCompanyName')}" 
+                       th:errors="*{newCompanyName}" 
+                       class="text-danger"></small>
+            </label>
+
+            <div class="grid">
+                <button type="submit">Перевести сотрудника</button>
+                <a th:href="@{/employees/employee-details/{name}(name=${employeeFullName})}" 
+                   role="button" 
+                   class="secondary">
+                    Отмена
+                </a>
+            </div>
+        </form>
+    </article>
+
+    <!-- Info message -->
+    <article style="max-width: 600px; margin: 0 auto;">
+        <details>
+            <summary>Информация о переводе</summary>
+            <p>При переводе сотрудника в другую компанию:</p>
+            <ul>
+                <li>Сохраняются все данные сотрудника (имя, должность, зарплата и т.д.)</li>
+                <li>Меняется только связь с компанией</li>
+                <li>История работы не сохраняется в текущей версии</li>
+            </ul>
+        </details>
+    </article>
+</main>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>
