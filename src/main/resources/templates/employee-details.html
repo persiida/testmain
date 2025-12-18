@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head"/>
+<body>
+<div th:replace="fragments/navbar"></div>
+<main class="container">
+    <hgroup>
+        <h1>Информация о сотруднике</h1>
+        <p>Подробные сведения о сотруднике</p>
+    </hgroup>
+    <article class="card">
+        <div class="grid">
+            <div>
+                <h2 th:text="${employeeDetails.firstName} + ' ' + ${employeeDetails.lastName}"></h2>
+                <p><strong>Уровень образования:</strong> <span th:text="${employeeDetails.educationLevel}"></span></p>
+                <p><strong>Должность:</strong> <span th:text="${employeeDetails.jobTitle}"></span></p>
+                <p><strong>Дата рождения:</strong> <span th:text="${employeeDetails.birthDate}"></span></p>
+                <p><strong>Зарплата:</strong> $<span th:text="${#numbers.formatDecimal(employeeDetails.salary, 1, 2)}"></span></p>
+                <p><strong>Компания:</strong> <span th:text="${employeeDetails.companyName}"></span></p>
+                <div sec:authorize="hasAnyRole('ADMIN', 'MODERATOR')">
+                                        <form th:action="@{/employees/employee-delete/{name}(name=${employeeDetails.firstName} + ' ' + ${employeeDetails.lastName})}"
+                                                    th:method="delete"
+                                                    onsubmit="return confirm('Вы уверены, что хотите удалить этого сотрудника?')">
+                                                <button type="submit" class="secondary">Удалить сотрудника</button>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center">
+                <img src="/pic/employee.png" alt="Сотрудник" style="width: 100%; max-width: 350px; border-radius: var(--pico-border-radius);">
+            </div>
+        </div>
+    </article>
+</main>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

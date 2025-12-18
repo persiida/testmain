@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head"/>
+<body>
+<div th:replace="fragments/navbar"></div>
+<main class="container">
+    <article style="max-width: 700px; margin: 0 auto;">
+        <hgroup>
+            <h1>Добавление сотрудника</h1>
+            <p>Заполните информацию о сотруднике</p>
+        </hgroup>
+        <form th:action="@{/employees/add}"
+              th:method="post"
+              th:object="${employeeModel}">
+
+            <div class="grid">
+                <label for="firstName">
+                    Имя
+                    <input th:field="*{firstName}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           id="firstName"
+                           placeholder="Введите имя"
+                           required/>
+                    <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger"></small>
+                </label>
+
+                <label for="lastName">
+                    Фамилия
+                    <input th:field="*{lastName}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           id="lastName"
+                           placeholder="Введите фамилию"
+                           required/>
+                    <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></small>
+                </label>
+            </div>
+
+            <fieldset>
+                <legend>Уровень образования</legend>
+                <label>
+                    <input th:field="*{educationLevel}"
+                           th:value="Master"
+                           type="radio"
+                           name="educationLevel"/>
+                    Магистр
+                </label>
+                <label>
+                    <input th:field="*{educationLevel}"
+                           th:value="Bachelor"
+                           type="radio"
+                           name="educationLevel"/>
+                    Бакалавр
+                </label>
+                <label>
+                    <input th:field="*{educationLevel}"
+                           th:value="Secondary"
+                           type="radio"
+                           name="educationLevel"/>
+                    Среднее
+                </label>
+                <small th:if="${#fields.hasErrors('educationLevel')}" th:errors="*{educationLevel}" class="text-danger"></small>
+            </fieldset>
+
+            <label for="company">
+                Компания
+                <select id="company" th:field="*{companyName}" required>
+                    <option value="">Выберите компанию...</option>
+                    <option th:each="c : ${availableCompanies}"
+                            th:value="${c.name}"
+                            th:text="${c.name}"></option>
+                </select>
+                <small th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}" class="text-danger"></small>
+            </label>
+
+            <label for="jobTitle">
+                Должность
+                <input th:field="*{jobTitle}"
+                       th:errorclass="is-invalid"
+                       type="text"
+                       id="jobTitle"
+                       placeholder="Введите должность"
+                       required/>
+                <small th:if="${#fields.hasErrors('jobTitle')}" th:errors="*{jobTitle}" class="text-danger"></small>
+            </label>
+
+            <div class="grid">
+                <label for="birthDate">
+                    Дата рождения
+                    <input th:field="*{birthDate}"
+                           th:errorclass="is-invalid"
+                           type="date"
+                           id="birthDate"
+                           required/>
+                    <small th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" class="text-danger"></small>
+                </label>
+
+                <label for="salary">
+                    Зарплата
+                    <input th:field="*{salary}"
+                           th:errorclass="is-invalid"
+                           type="number"
+                           step="0.01"
+                           min="0"
+                           id="salary"
+                           placeholder="Введите зарплату"
+                           required/>
+                    <small th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" class="text-danger"></small>
+                </label>
+            </div>
+
+            <button type="submit">Добавить сотрудника</button>
+        </form>
+    </article>
+</main>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head"/>
+<body>
+<div th:replace="fragments/navbar"></div>
+<main class="container">
+    <hgroup>
+        <h1>Информация о компании</h1>
+        <p>Подробные сведения о компании</p>
+    </hgroup>
+    <article class="card">
+        <div class="grid">
+            <div>
+                <img src="/pic/company.png" alt="Компания" style="width: 100%; max-width: 400px; border-radius: var(--pico-border-radius);">
+            </div>
+            <div>
+                <h2 th:text="${companyDetails.name}"></h2>
+                <p><strong>Город:</strong> <span th:text="${companyDetails.town}"></span></p>
+                <p><strong>Описание:</strong> <span th:text="${companyDetails.description}"></span></p>
+                <p><strong>Бюджет:</strong> $<span th:text="${#numbers.formatDecimal(companyDetails.budget, 1, 2)}"></span></p>
+                <div sec:authorize="hasRole('ADMIN')">
+                          <a th:href="@{/companies/company-delete/{company-name}(company-name=${companyDetails.name})}"
+                              role="button"
+                       class="secondary"
+                       onclick="return confirm('Вы уверены, что хотите удалить эту компанию?')">
+                        Удалить компанию
+                    </a>
+                </div>
+            </div>
+        </div>
+    </article>
+</main>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

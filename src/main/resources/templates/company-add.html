@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head"/>
+<body>
+<div th:replace="fragments/navbar"></div>
+<main class="container">
+    <article style="max-width: 600px; margin: 0 auto;">
+        <hgroup>
+            <h1>Добавление компании</h1>
+            <p>Заполните информацию о компании ниже</p>
+        </hgroup>
+        <form th:action="@{/companies/add}"
+              th:method="post"
+              th:object="${companyModel}">
+            <label for="name">
+                Название компании
+                <input th:field="*{name}"
+                       th:errorclass="is-invalid"
+                       type="text" 
+                       id="name"
+                       placeholder="Введите название компании"
+                       required/>
+                <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></small>
+            </label>
+
+            <label for="town">
+                Город
+                <input th:field="*{town}"
+                       th:errorclass="is-invalid"
+                       type="text" 
+                       id="town"
+                       placeholder="Введите город"
+                       required/>
+                <small th:if="${#fields.hasErrors('town')}" th:errors="*{town}" class="text-danger"></small>
+            </label>
+
+            <label for="description">
+                Описание
+                <textarea th:field="*{description}"
+                          th:errorclass="is-invalid"
+                          id="description"
+                          rows="4"
+                          placeholder="Опишите компанию..."
+                          required></textarea>
+                <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger"></small>
+            </label>
+
+            <label for="budget">
+                Бюджет
+                <input th:field="*{budget}"
+                       th:errorclass="is-invalid"
+                       type="number" 
+                       step="0.01"
+                       min="0" 
+                       id="budget"
+                       placeholder="Введите сумму бюджета"
+                       required/>
+                <small th:if="${#fields.hasErrors('budget')}" th:errors="*{budget}" class="text-danger"></small>
+            </label>
+
+            <button type="submit">Добавить компанию</button>
+        </form>
+    </article>
+</main>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

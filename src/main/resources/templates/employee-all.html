@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head"/>
+<body>
+<div th:replace="fragments/navbar"></div>
+<main class="container">
+    <hgroup>
+    <h1>Все сотрудники</h1>
+    <p>Просмотрите всех сотрудников системы</p>
+    </hgroup>
+    <div class="grid">
+        <div th:each="e : ${allEmployees}" class="card">
+            <h3 th:text="${e.firstName} + ' ' + ${e.lastName}"></h3>
+            <p><strong>Должность:</strong> <span th:text="${e.jobTitle}"></span></p>
+            <p><strong>Дата рождения:</strong> <span th:text="${e.birthDate}"></span></p>
+            <a th:href="@{/employees/employee-details/{name}(name=${e.firstName} + ' ' + ${e.lastName})}" 
+               role="button" 
+               class="outline">
+                Подробнее
+            </a>
+        </div>
+    </div>
+    <p th:if="${#lists.isEmpty(allEmployees)}" class="text-center">
+        <em>Сотрудники не найдены. Добавьте новых сотрудников, чтобы начать!</em>
+    </p>
+</main>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>
